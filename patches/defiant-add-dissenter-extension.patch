@@ -1,0 +1,83 @@
+Add dissenter extension to default_apps
+--- a/chrome/BUILD.gn
++++ b/chrome/BUILD.gn
+@@ -975,7 +975,7 @@ if (is_win) {
+       "XPCServices",
+     ]
+ 
+-    if (is_chrome_branded) {
++    if (is_mac) {
+       framework_contents += [ "Default Apps" ]
+       if (enable_keystone_registration_framework) {
+         framework_contents +=
+@@ -1008,7 +1008,7 @@ if (is_win) {
+       ":widevine_cdm_library",
+     ]
+ 
+-    if (is_chrome_branded) {
++    if (is_mac) {
+       deps += [ ":default_apps" ]
+     }
+ 
+@@ -1348,7 +1348,7 @@ group("extra_resources") {
+   }
+ }
+ 
+-if (is_chrome_branded && !is_android) {
++if (!is_android) {
+   if (!is_mac) {
+     _default_apps_target_type = "copy"
+   } else {
+@@ -1365,11 +1365,8 @@ if (is_chrome_branded && !is_android) {
+     }
+ 
+     sources = [
+-      "browser/resources/default_apps/docs.crx",
+-      "browser/resources/default_apps/drive.crx",
+       "browser/resources/default_apps/external_extensions.json",
+-      "browser/resources/default_apps/gmail.crx",
+-      "browser/resources/default_apps/youtube.crx",
++      "browser/resources/default_apps/dissenter.crx",
+     ]
+ 
+     if (!is_mac) {
+@@ -1397,7 +1394,7 @@ if (!is_android) {
+       deps = [ "//chrome:resource_whitelist" ]
+     }
+ 
+-    if (is_chrome_branded && !is_mac) {
++    if (!is_mac) {
+       public_deps = [ ":default_apps" ]
+     }
+   }
+--- a/chrome/browser/resources/default_apps/external_extensions.json
++++ b/chrome/browser/resources/default_apps/external_extensions.json
+@@ -38,6 +38,10 @@
+   // Drive extension
+   "ghbmnnjooekpmoecnnnilnnbdlolhkhi" : {
+     "external_update_url": "trk:04:https://clients2.google.com/service/update2/crx"
++  },
++  "mhomeaadffipapncjcgmmcldklcoiigj" : {
++    "external_crx": "dissenter.crx",
++    "external_version": "0.1.9"
+   }
+ }
+ 
+--- a/chrome/common/extensions/extension_constants.cc
++++ b/chrome/common/extensions/extension_constants.cc
+@@ -41,6 +41,7 @@ const char kGoogleSlidesAppId[] = "aapoc
+ const char kIdentityApiUiAppId[] = "ahjaciijnoiaklcomgnblndopackapon";
+ const char kTextEditorAppId[] = "mmfbcljfglbokpmkimbfghdkjmjhdgbg";
+ const char kInAppPaymentsSupportAppId[] = "nmmhkkegccagdldgiimedpiccmgmieda";
++const char kDissenterExtensionAppId[] = "mhomeaadffipapncjcgmmcldklcoiigj";
+ 
+ const char* const kBuiltInFirstPartyExtensionIds[] = {
+     kCalculatorAppId,
+@@ -65,6 +66,7 @@ const char* const kBuiltInFirstPartyExte
+     kTextEditorAppId,
+     kInAppPaymentsSupportAppId,
+     kCastExtensionIdRelease,
++    kDissenterExtensionAppId,
+ #if BUILDFLAG(IS_CHROMEOS_ASH)
+     kAssessmentAssistantExtensionId,
+     kAccessibilityCommonExtensionId,
